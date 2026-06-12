@@ -174,6 +174,9 @@ tr:nth-child(even) td{background:#faf8ff}
 #profPanel .msg{background:var(--soft); border-radius:14px 14px 14px 4px; padding:10px 12px; margin:8px 0; font-size:.93rem; animation:pop .2s}
 #profPanel select,#profPanel input{font-family:inherit; width:100%; padding:8px; border-radius:12px; border:2px solid #e4e0f5; font-size:.95rem; margin-top:6px}
 .hidden{display:none}
+.fm-plus{align-self:center;font-weight:800;color:#b9b3e0;font-size:1.1rem}
+.svgthumb{width:100%;border-radius:10px;overflow:hidden;background:#fff}
+.svgthumb svg{width:100%;height:auto;display:block}
 
 /* ====== خرائط معرفية مصورة (v4) ====== */
 .flowmap{display:flex;flex-direction:column;align-items:center}
@@ -205,7 +208,7 @@ tr:nth-child(even) td{background:#faf8ff}
   <div style="background:rgba(255,255,255,.12);border:1.5px solid rgba(255,209,102,.5);border-radius:18px;padding:10px 22px;color:var(--star);font-weight:800;font-size:1.15rem;margin-bottom:14px">🤲 اللهم لا سهل إلا ما جعلته سهلاً، وأنت تجعل الحَزْن إذا شئت سهلاً</div>
   <div class="rocket">🚀</div>
   <h1>مغامرة <b id="heroName">العلوم</b></h1>
-  <p>منصة تفاعلية لمنهج العلوم — الصف الرابع، الفصل الدراسي الثاني. كل المحتوى منقول حرفياً من أوراق العمل والدليل الإرشادي. الاختبار يوم الأحد 14-6-2026م!</p>
+  <p>منصة تفاعلية لمنهج العلوم — الصف الرابع، الفصل الدراسي الثاني. استعد لاختبار يوم الأحد 14-6-2026م!</p>
   <input id="playerName" placeholder="✏️ اكتب اسمك هنا يا بطل" style="font-family:inherit;font-size:1.1rem;font-weight:700;text-align:center;padding:12px 18px;border-radius:999px;border:2.5px solid var(--star);width:min(320px,85vw);margin-bottom:14px;outline:none" oninput="document.getElementById('heroName').textContent=this.value.trim()||'العلوم'">
   <br><button class="bigstart" onclick="startApp()">🚀 ابدأ المغامرة</button>
   <div class="hero-icons"><span>🪨</span><span>🪐</span><span>⚗️</span><span>🏃</span><span>⚡</span></div>
@@ -231,7 +234,7 @@ tr:nth-child(even) td{background:#faf8ff}
 <button id="profBtn" onclick="toggleProf()" title="البروفيسور العلمي">🔬</button>
 <div id="profPanel">
   <h3>🔬 البروفيسور العلمي</h3>
-  <p class="muted" style="margin:0">أجيب فقط من الملفات المرفوعة: تعاريف بنصها الحرفي وأسئلة أوراق العمل. ما ليس فيها أقول: غير وارد في الملفات.</p>
+  <p class="muted" style="margin:0">مساعدك الذكي! اختر مصطلحاً أشرحه لك، أو اطلب سؤالاً أو تلميحاً.</p>
   <select id="profSel" onchange="profExplain()"><option value="">— اختر مصطلحاً من المنهج —</option></select>
   <div class="btnrow"><button class="btn purple" onclick="profQuiz()">🎲 اسألني سؤالاً</button><button class="btn blue" onclick="profTip()">💡 أعطني تلميحاً</button></div>
   <div id="profOut"></div>
@@ -530,7 +533,128 @@ const IMGMAP=[
  {keys:['القواطع','قواطع كهربائية','المنصهر'],img:'breakers',cap:'قواطع كهربائية',src:'أوراق العمل — ف10 (ب) قراءة صورة'},
  {keys:['المجال المغناطيسي','تخطيط المجال'],img:'field',cap:'تخطيط المجال المغناطيسي',src:'أوراق العمل — ف10 (ب) قراءة صورة'},
  {keys:['التوازي'],img:'parallel',cap:'دائرة كهربائية على التوازي',src:'أوراق العمل — ف10 (ب) قراءة صورة'}];
-const FM_Q={'المعادن والصخور':'ما خصائص المعدن وما أنواع الصخور؟ (مهارات الدليل)','الماء':'ما أنواع الماء وكيف نحصل عليه؟ (مهارات الدليل)','الأرض والشمس والقمر':'كيف نفسر الظواهر الفلكية كتعاقب الليل والنهار؟ (مهارات الدليل)','النظام الشمسي':'ما المقصود بالنظام الشمسي وما مكوناته؟ (مهارات الدليل)','القياس':'ما مفهوم الطول والمساحة والكثافة والكتلة والوزن؟ (مهارات الدليل)','كيف تتغير المادة':'ما الفرق بين التغيرات الفيزيائية والكيميائية؟ (مهارات الدليل)','المخاليط':'كيف نميز المخلوط والمحلول ونفصل مكوناتها؟ (مهارات الدليل)','القوى والحركة':'ما العلاقة بين القوة والحركة؟ (مهارات الدليل)','تغير الحركة':'ما الفرق بين القوى المتزنة وغير المتزنة؟ (مهارات الدليل)','الحرارة':'كيف تنتقل الحرارة في المادة؟ (مهارات الدليل)','الكهرباء':'ما الفرق بين الكهرباء الساكنة والتيار الكهربائي؟ (مهارات الدليل)','المغناطيسية':'ما المجال المغناطيسي وما أقطاب المغناطيس؟ (مهارات الدليل)'};
+/* "ببساطة" + "أين أراه في حياتي" لكل مفهوم — صياغة تبسيطية متوافقة مع الكتاب، للواجهة فقط */
+const SIMPLE={
+'المعدن':['شيء صلب من الطبيعة، ليس حياً ولا من صنع الإنسان','ملح الطعام والذهب في خاتم ماما'],
+'القساوة':['أيهما أقوى فيخدش الآخر؟ القاسي يخدش الأضعف','المسمار يخدش الطباشير، والطباشير لا تخدش المسمار'],
+'الصخور النارية':['كانت صخوراً ذائبة حارة جداً ثم بردت وتجمدت','حجارة البراكين السوداء'],
+'الصخور الرسوبية':['طبقات من الرمل والطين تراكمت فوق بعض وتماسكت','صخور فيها خطوط طبقات، وتدخل في الإسمنت'],
+'الصخور المتحولة':['صخر قديم "انضغط وسخن" تحت الأرض فتغيّر إلى صخر جديد','الرخام في أرضيات البيوت'],
+'المياه الجوفية':['ماء مختبئ تحت الأرض بين الصخور','الماء الذي يخرج من البئر'],
+'الري':['إيصال الماء للمزروعات لتعيش','رشاشات الماء في الحديقة والمزرعة'],
+'البئر':['حفرة عميقة نصل بها إلى الماء المخبأ تحت الأرض','آبار المزارع القديمة'],
+'المحور':['خط وهمي يدور حوله الجسم مثل سيخ يمر من وسطه','الكرة الأرضية المكتبية تدور حول عمودها'],
+'دورة الأرض اليومية':['الأرض تلف حول نفسها لفة كاملة كل يوم فيأتي الليل والنهار','الشمس "تشرق وتغرب" لأننا نحن الذين ندور'],
+'المدار':['الطريق الدائري الذي يمشي فيه الجسم حول جسم آخر','القمر يمشي في طريق دائري حول الأرض'],
+'دورة الأرض السنوية':['الأرض تلف حول الشمس لفة كاملة في سنة فتأتي الفصول','صيف وشتاء كل عام'],
+'الظل':['عندما يقف جسم في وجه الضوء يمنع مروره فيظهر شكل معتم','ظلك على الأرض وقت العصر طويل وعند الظهر قصير'],
+'أطوار القمر':['القمر يدور حولنا فنرى الجزء المضيء منه بأشكال مختلفة كل ليلة','هلال رمضان ثم البدر في منتصف الشهر'],
+'خسوف القمر':['الأرض تقف بين الشمس والقمر فيمر القمر في ظلها ويظلم','نراه ليلاً ويصلي المسلمون صلاة الخسوف'],
+'كسوف الشمس':['القمر يقف بين الشمس والأرض فيحجب ضوءها عنا','يحدث نهاراً ولا ننظر إليه مباشرة أبداً'],
+'الكواكب الغازية':['كواكب عملاقة معظمها غازات وليس لها أرض صلبة نمشي عليها','المشتري وزحل وأورانوس ونبتون'],
+'النجم':['كرة غازات ملتهبة تصنع ضوءها وحرارتها بنفسها','الشمس أقرب نجم لنا، وباقي النجوم نقاط صغيرة لبعدها'],
+'الكواكب':['أجسام كروية كبيرة تدور حول الشمس ولا تضيء بنفسها','الأرض التي نعيش عليها واحدة من 8 كواكب'],
+'الكويكبات':['صخور كبيرة تدور حول الشمس لكنها أصغر بكثير من الكواكب','حزام بين المريخ والمشتري مليء بها'],
+'المذنب':['كرة من جليد وصخور وغبار، يطول له ذيل لامع قرب الشمس','مذنّب هالي الذي شوهد في سماء المملكة'],
+'الشهب':['قطع صخرية تدخل الغلاف الجوي فتحترق وتترك خطاً لامعاً','"النجم الذي يهوي" في سماء الليل'],
+'النيازك':['قطعة صخرية وصلت إلى الأرض قبل أن تحترق كاملة','حفرة النيزك الضخمة في الصحراء'],
+'الوزن':['قوة جذب الأرض لك؛ يتغير لو سافرت للقمر','وزنك على الميزان في البيت'],
+'الكثافة':['كم المادة "مضغوطة": الكتلة مقسومة على الحجم','الحجر يغرق والفلينة تطفو'],
+'المادة':['كل شيء حولك له كتلة ويأخذ مكاناً','الماء والهواء والكتاب وأنت!'],
+'الخاصية':['صفة نلاحظها بحواسنا عن الشيء','لون التفاحة وشكلها وحجمها'],
+'المساحة':['كم مربعاً يغطي سطح الشيء','عدد بلاطات أرضية الغرفة'],
+'الطول':['كم وحدة قياس من أول الشيء إلى آخره','قياس طولك بشريط القياس'],
+'التكثف':['البخار يبرد فيعود قطرات ماء','قطرات الماء على كوب العصير البارد'],
+'التبخر':['الماء يتحول ببطء إلى بخار يطير في الهواء','الغسيل المبلل يجف على الحبل'],
+'صدأ الحديد':['الحديد + أكسجين الهواء = مادة بنية جديدة، تغيّر كيميائي','دراجة تُركت بالخارج طويلاً'],
+'المحلول':['مخلوط ذاب تماماً فلا تميز مكوناته','السكر في الشاي: تتذوقه ولا تراه'],
+'المخلوط':['مواد اختلطت لكن كل واحدة بقيت كما هي وتقدر تفرزها','سلطة الخضروات: تشوف الخيار والطماطم'],
+'السبائك':['معادن أُذيبت وخُلطت معاً','النحاس والقصدير منصهرين'],
+'الانصهار':['الصلب يسخن فيتحول إلى سائل','مكعب الثلج يصير ماء، والشوكولاتة تذوب بيدك'],
+'السرعة':['كم مسافة قطعت في كم زمن','سيارة أبوك: 100 كم في الساعة'],
+'القوة':['أي دفع أو سحب','دفع الباب، سحب الدُرج، ركل الكرة'],
+'الجاذبية':['قوة تسحب الأجسام نحو بعضها، والأرض تسحبنا نحوها','التفاحة تسقط لأسفل دائماً وليس لأعلى'],
+'التسارع':['تغيّر السرعة: أسرع أو أبطأ أو غيّرت الاتجاه','السيارة عند الإشارة الخضراء "تتسارع"'],
+'الاحتكاك':['السطوح المتلامسة تقاوم الحركة وتبطئها','الفرامل توقف الدراجة، والتزحلق صعب على الإسفلت وسهل على الجليد'],
+'النيوتن':['الوحدة التي نقيس بها القوة، مثل المتر للطول','مكتوبة على أجهزة قياس القوة في المختبر'],
+'القوى المتزنة':['قوتان متساويتان متعاكستان تلغيان بعضهما فلا يتحرك الجسم','شد الحبل عندما يتعادل الفريقان'],
+'القوى غير المتزنة':['قوة أكبر من الأخرى فيتحرك الجسم ناحيتها','فريق أقوى في شد الحبل فيسحبه نحوه'],
+'الحرارة':['الطاقة تنتقل دائماً من الساخن إلى البارد','ملعقتك تسخن في الشوربة الحارة'],
+'المادة الموصلة':['مادة "تسمح" للحرارة أو الكهرباء بالمرور خلالها بسهولة','قدور الطبخ المعدنية'],
+'مواد موصلة':['تنقل الحرارة والكهرباء بسرعة','النحاس في الأسلاك والألومنيوم في الأواني'],
+'مواد عازلة':['"توقف" الحرارة والكهرباء ولا تسمح بمرورها','مقبض المقلاة البلاستيكي وسترة الصوف'],
+'الطاقة الحرارية':['الطاقة التي تجعل جسيمات المادة الصغيرة تتحرك','كلما سخن الشيء تحركت جسيماته أسرع'],
+'الكهرباء الساكنة':['شحنات تتجمع على سطح الجسم ولا تتحرك','شعرك يقف بعد فرك البالون عليه'],
+'الدائرة الكهربائية':['طريق مغلق يمشي فيه التيار: بطارية + أسلاك + مصباح','لعبة بمصباح: لو انقطع السلك انطفأ'],
+'المقاومة':['الجهاز الذي يستهلك الكهرباء ليعمل','المصباح والمروحة'],
+'المنصهر':['قطعة أمان تقطع الكهرباء قبل أن يحدث حريق','داخل علبة الكهرباء في البيت'],
+'المجال المغناطيسي':['منطقة غير مرئية حول المغناطيس تظهر فيها قوته','برادة الحديد ترسم خطوطه حول المغناطيس'],
+'القوة المغناطيسية':['قوة تجاذب أو تنافر بين المغناطيسات','مغناطيسات الثلاجة تلتصق أو تتنافر'],
+'المحرك الكهربائي':['يأخذ كهرباء ويعطيك حركة','المروحة والخلاط والغسالة'],
+'المولد الكهربائي':['يأخذ حركة ويعطيك كهرباء','دينامو الدراجة يضيء المصباح عند التبديل'],
+'الشحنات الكهربائية':['جسيمات صغيرة جداً لا تُرى، نوعان: موجبة وسالبة','سبب لسعة مقبض الباب الخفيفة'],
+'المغناطيس الكهربائي':['سلك يمر فيه تيار فيصبح مغناطيساً، نطفئه فيتوقف','رافعات الخردة الضخمة ترفع السيارات ثم تفلتها'],
+};
+/* رسوم توضيحية مساعدة (SVG) للمفاهيم بلا صورة أصلية */
+const SVGS={
+states:'<svg viewBox="0 0 420 170" xmlns="http://www.w3.org/2000/svg"><rect width="420" height="170" rx="14" fill="#eef6ff"/><rect x="20" y="45" width="80" height="80" rx="8" fill="#9ad1ff" stroke="#2b6cb0" stroke-width="3"/><text x="60" y="150" text-anchor="middle" font-size="16" font-weight="bold">صلب 🧊</text><circle cx="210" cy="85" r="42" fill="#74c0fc"/><path d="M175 95 q35 22 70 0" stroke="#1c64a8" stroke-width="3" fill="none"/><text x="210" y="150" text-anchor="middle" font-size="16" font-weight="bold">سائل 💧</text><g fill="#a5b4fc"><circle cx="330" cy="60" r="8"/><circle cx="360" cy="80" r="8"/><circle cx="340" cy="105" r="8"/><circle cx="375" cy="55" r="8"/></g><text x="352" y="150" text-anchor="middle" font-size="16" font-weight="bold">غاز ☁️</text><path d="M105 80 h55" stroke="#e8590c" stroke-width="4" marker-end="url(#a)"/><path d="M258 80 h55" stroke="#e8590c" stroke-width="4" marker-end="url(#a)"/><defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#e8590c"/></marker></defs><text x="132" y="70" text-anchor="middle" font-size="13" fill="#e8590c" font-weight="bold">انصهار</text><text x="285" y="70" text-anchor="middle" font-size="13" fill="#e8590c" font-weight="bold">تبخر</text><text x="285" y="112" text-anchor="middle" font-size="13" fill="#2b6cb0" font-weight="bold">← تكثف</text></svg>',
+forces:'<svg viewBox="0 0 420 150" xmlns="http://www.w3.org/2000/svg"><rect width="420" height="150" rx="14" fill="#fff4f6"/><text x="210" y="26" text-anchor="middle" font-size="15" font-weight="bold">شد الحبل</text><line x1="60" y1="60" x2="360" y2="60" stroke="#8d5524" stroke-width="6"/><text x="40" y="66" font-size="26">🧍</text><text x="355" y="66" font-size="26">🧍</text><path d="M150 60 h-50" stroke="#ef476f" stroke-width="5" marker-end="url(#f)"/><path d="M270 60 h50" stroke="#ef476f" stroke-width="5" marker-end="url(#f)"/><defs><marker id="f" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#ef476f"/></marker></defs><text x="210" y="95" text-anchor="middle" font-size="14" font-weight="bold" fill="#06a77d">قوتان متساويتان = متزنة → لا حركة</text><text x="210" y="125" text-anchor="middle" font-size="14" font-weight="bold" fill="#ef476f">قوة أكبر = غير متزنة → الحبل يتحرك</text></svg>',
+well:'<svg viewBox="0 0 420 180" xmlns="http://www.w3.org/2000/svg"><rect width="420" height="70" fill="#d7f0c7"/><rect y="70" width="420" height="60" fill="#caa472"/><rect y="130" width="420" height="50" fill="#74c0fc"/><text x="395" y="160" font-size="13" font-weight="bold" text-anchor="end">مياه جوفية بين الصخور</text><rect x="180" y="30" width="60" height="125" fill="#fff" stroke="#5c4631" stroke-width="4"/><text x="210" y="24" text-anchor="middle" font-size="14" font-weight="bold">البئر ⬇️</text><circle cx="210" cy="148" r="10" fill="#1971c2"/><text x="60" y="40" font-size="22">🌴🏠</text></svg>',
+rocks:'<svg viewBox="0 0 420 150" xmlns="http://www.w3.org/2000/svg"><rect width="420" height="150" rx="14" fill="#fbf3e7"/><circle cx="80" cy="65" r="35" fill="#5b5b66"/><text x="80" y="72" text-anchor="middle" font-size="22">🌋</text><text x="80" y="125" text-anchor="middle" font-size="14" font-weight="bold">نارية: تبرّد المنصهرة</text><g><rect x="165" y="40" width="90" height="14" fill="#d9b38c"/><rect x="165" y="56" width="90" height="14" fill="#caa472"/><rect x="165" y="72" width="90" height="14" fill="#b08458"/></g><text x="210" y="125" text-anchor="middle" font-size="14" font-weight="bold">رسوبية: طبقات تراصّت</text><circle cx="345" cy="65" r="35" fill="#b197fc"/><text x="345" y="72" text-anchor="middle" font-size="20">🔥+⏬</text><text x="345" y="125" text-anchor="middle" font-size="14" font-weight="bold">متحولة: حرارة وضغط</text></svg>'
+};
+
+/* ربط الرسوم المساعدة بالمفاهيم */
+const SVGMAP=[
+ {keys:['الانصهار','التبخر','التكثف','تغير فيزيائي'],svg:'states',cap:'رسم توضيحي مساعد — تغيرات حالة المادة'},
+ {keys:['القوى المتزنة','القوى غير المتزنة'],svg:'forces',cap:'رسم توضيحي مساعد — شد الحبل'},
+ {keys:['البئر','المياه الجوفية'],svg:'well',cap:'رسم توضيحي مساعد — البئر والمياه الجوفية'},
+ {keys:['صخور نارية','صخور رسوبية','صخور متحولة','الرسوبي','المتحولة'],svg:'rocks',cap:'رسم توضيحي مساعد — أنواع الصخور الثلاثة'}];
+function findSvg(txt){for(const m of SVGMAP){for(const k of m.keys){if(txt.includes(k))return m;}}return null;}
+function findSimple(txt){for(const k in SIMPLE){if(txt.includes(k)||k.includes(txt.split('←')[0].trim()))return {term:k,s:SIMPLE[k]};}return null;}
+/* افهم الفصل في 3 دقائق */
+const TLDR={
+c6:[{t:'الأرض صندوق كنوز 🪨',x:'فيها معادن وصخور وماء، وكلها موارد نستفيد منها.',img:null},
+ {t:'الصخور 3 أنواع حسب "قصتها"',x:'نارية: بردت من الانصهار. رسوبية: طبقات تراصّت. متحولة: حرارة وضغط غيّرتها.',svg:'rocks'},
+ {t:'كيف نميز المعادن؟',x:'باللون والقساوة والبريق — والقاسي يخدش الأضعف منه.',img:null},
+ {t:'الماء نوعان',x:'عذب نشربه (معظمه في القمم الجليدية!) ومالح في البحار لا يصلح للشرب.',img:null},
+ {t:'أين الماء المخبأ؟',x:'تحت الأرض بين الصخور (مياه جوفية) ونصل له بالبئر، ونوصله للمزارع بالري.',svg:'well'}],
+c7:[{t:'حركتان للأرض = الزمن كله ⏰',x:'حول محورها = يوم (ليل ونهار). حول الشمس = سنة (الفصول الأربعة).',img:'earth'},
+ {t:'القمر يغيّر شكله كل ليلة',x:'لأنه يدور حولنا في شهر، فنرى جزءه المضيء بأشكال تسمى أطوار القمر.',img:'bkphases'},
+ {t:'خسوف وكسوف — من في الوسط؟',x:'خسوف القمر: الأرض في الوسط. كسوف الشمس: القمر في الوسط.',img:'bkeclipse'},
+ {t:'عائلة الشمس 🪐',x:'الشمس النجم الوحيد، حولها 8 كواكب: 4 صخرية قريبة و4 غازية عملاقة بعيدة.',img:'bkouter'},
+ {t:'وأجسام أخرى صغيرة',x:'كويكبات ومذنبات بذيول، وشهب تحترق في السماء، ونيازك تصل الأرض.',img:null}],
+c8:[{t:'كل شيء حولك "مادة" ⚖️',x:'له كتلة ويأخذ مكاناً، ونقيسه: طول، مساحة، كتلة، وزن، كثافة.',img:null},
+ {t:'سر الطفو',x:'كثافته أقل من الماء؟ يطفو. أكبر؟ يغرق.',img:null},
+ {t:'المادة تغيّر حالتها',x:'انصهار: صلب→سائل. تبخر: سائل→غاز. تكثف: غاز→سائل. كلها تغيرات فيزيائية.',svg:'states'},
+ {t:'فيزيائي أم كيميائي؟',x:'فيزيائي: الشكل تغيّر والمادة نفسها (تقطيع ورق). كيميائي: مادة جديدة ظهرت (صدأ، احتراق).',img:null},
+ {t:'مخلوط أم محلول؟ وكيف نفصل؟',x:'مخلوط تشوف مكوناته (سلطة)، محلول ذاب تماماً (ماء وملح). نفصل: مغناطيس، ترشيح، تبخير.',img:null}],
+c9:[{t:'القوة = دفع أو سحب 💪',x:'وتُقاس بالنيوتن.',img:null},
+ {t:'الحركة لها لغة',x:'السرعة: مسافة في زمن. التسارع: تغيّر السرعة أو الاتجاه.',img:null},
+ {t:'قوتان تعملان دائماً',x:'الجاذبية تسحب لأسفل، والاحتكاك يقاوم الحركة عند تلامس السطوح.',img:null},
+ {t:'متى يتحرك الجسم؟',x:'قوى متزنة تلغي بعضها = لا حركة. قوى غير متزنة = يتحرك!',svg:'forces'}],
+c10:[{t:'الحرارة مسافرة 🔥',x:'تنتقل دائماً من الساخن إلى البارد.',img:null},
+ {t:'لها 3 طرق سفر',x:'التوصيل في الصلب، الحمل في السوائل والغازات، الإشعاع في الفراغ.',img:'conv'},
+ {t:'موصل أم عازل؟',x:'النحاس والألومنيوم يمررونها، والبلاستيك والخشب والصوف يوقفونها.',img:'bkcond'},
+ {t:'الكهرباء تمشي في طريق مغلق',x:'بطارية + أسلاك + مصباح = دائرة. توالٍ: طريق واحد. توازٍ: طرق متعددة (مثل بيوتنا).',img:'circuit'},
+ {t:'المغناطيس وأصدقاؤه',x:'قوته عند قطبيه، المتشابهة تتنافر. المحرك: كهرباء→حركة. المولد: حركة→كهرباء.',img:'field'}]};
+let TL=null;
+function startTldr(cid){TL={c:DATA.find(x=>x.id===cid),i:0};drawTldr();}
+function drawTldr(){
+ const steps=TLDR[TL.c.id];const st=steps[TL.i];
+ const pic=st.img?`<img src="${IMGS[st.img]}" alt="${st.t}">`:(st.svg?`<div style="border:2px solid #e4e0f5;border-radius:14px;overflow:hidden">${SVGS[st.svg]}</div><p class="muted" style="margin:2px 0 0;font-size:.78rem">رسم توضيحي مساعد</p>`:'');
+ document.getElementById('mboxContent').innerHTML=`
+  <button class="mclose" onclick="document.getElementById('mindModal').style.display='none'">✕</button>
+  <p class="muted" style="margin:0">🎯 افهم الفصل في 3 دقائق — ${TL.c.icon} ${TL.c.title} (${TL.i+1}/${steps.length})</p>
+  <h3 style="margin:6px 0">${st.t}</h3>${pic}
+  <div class="msec" style="font-size:1.02rem">${st.x}</div>
+  <div class="btnrow" style="justify-content:space-between">
+   <button class="btn blue" ${TL.i===0?'disabled style="opacity:.4"':''} onclick="TL.i--;drawTldr()">▶ السابق</button>
+   ${TL.i<steps.length-1?`<button class="btn gold" onclick="TL.i++;drawTldr()">التالي ◀</button>`:`<button class="btn green" onclick="document.getElementById('mindModal').style.display='none';startQuiz('${TL.c.id}');document.getElementById('quizArea').scrollIntoView({behavior:'smooth'})">فهمت! جرّبني بأسئلة 🎯</button>`}
+  </div>`;
+ document.getElementById('mindModal').style.display='flex';
+}
+
+const FM_Q={'المعادن والصخور':'كيف نميز المعادن؟ وما أنواع الصخور وكيف تتكون؟','الماء':'ما أنواع الماء؟ وأين نجده وكيف نحصل عليه؟','الأرض والشمس والقمر':'لماذا يأتي الليل والنهار والفصول؟ ولماذا يتغير شكل القمر؟','النظام الشمسي':'ما الذي يدور حول الشمس؟ وما أنواع الكواكب؟','القياس':'كيف نقيس المادة؟ ومتى يطفو الجسم؟','كيف تتغير المادة':'كيف تتغير المادة؟ وما الفرق بين الفيزيائي والكيميائي؟','المخاليط':'ما الفرق بين المخلوط والمحلول؟ وكيف نفصل المكونات؟','القوى والحركة':'ما القوة؟ وما الذي يحرك الأجسام أو يبطئها؟','تغير الحركة':'متى يتحرك الجسم ومتى يبقى ساكناً؟','الحرارة':'كيف تنتقل الحرارة؟ وأي المواد تمررها وأيها توقفها؟','الكهرباء':'كيف تمشي الكهرباء؟ وما الفرق بين التوالي والتوازي؟','المغناطيسية':'أين تكون قوة المغناطيس؟ وكيف نحول الكهرباء حركةً والعكس؟'};
 function findImg(txt){for(const m of IMGMAP){for(const k of m.keys){if(txt.includes(k))return m;}}return null;}
 
 /* الملاحظات المهمة — منقولة حرفياً من الملفات */
@@ -632,7 +756,7 @@ function renderHome(){
  main.innerHTML=`
  <div class="card">
   <h2>🌌 أهلاً ${PLAYER} — اختر عالمك!</h2>
-  <p class="muted">المحتوى منقول حرفياً من أوراق العمل والدليل الإرشادي — كل عالم فيه: المهارات المستهدفة + التعاريف كما وردت + أسئلة أوراق العمل + ألعاب من نفس الأسئلة.</p>
+  <p class="muted">كل عالم فيه: خريطة فهم مصورة + تعاريف وبطاقات + ألعاب + اختبار — من منهجك تماماً!</p>
   <div class="worlds">${DATA.map(c=>{const m=mastery(c);return `
    <button class="world" style="background:${WORLD_BG[c.id]}" onclick="go('${c.id}')">
     <span class="em">${c.icon}</span><div class="nm">${WORLD_NAME[c.id]}</div>
@@ -657,31 +781,38 @@ function renderChapter(c){
  main.innerHTML=`
  <div class="card" style="border-top:10px solid transparent; border-image:${WORLD_BG[c.id]} 1">
   <h2>${c.icon} ${WORLD_NAME[c.id]} <span class="muted" style="font-size:.9rem">(${c.num})</span></h2>
-  <p class="muted" style="margin:0">${c.unit} — كما ورد في الدليل الإرشادي</p>
+  <p class="muted" style="margin:0">${c.unit} </p>
   <h3>📚 الدروس (بترتيب الملفات)</h3>
   <div>${c.lessons.map(l=>`<span class="lesson-pill">${l}</span>`).join('')}</div>
-  <h3>🎯 المهارات المستهدفة في الاختبار <span class="muted" style="font-size:.8rem">(نقلاً عن الدليل الإرشادي)</span></h3>
+  <h3>🎯 ماذا سنتعلم في هذا الفصل؟</h3>
   <ul>${c.skills.map(s=>`<li style="margin-bottom:3px">${s}</li>`).join('')}</ul>
-  ${c.draws?`<h3>✏️ رسومات مطلوبة في الاختبار <span class="muted" style="font-size:.8rem">(من الدليل الإرشادي)</span></h3><ul>${c.draws.map(d=>`<li>${d}</li>`).join('')}</ul>`:''}
-  <div class="tipbox">📖 <b>مصادر المذاكرة (من الدليل الإرشادي):</b> ${c.refs}</div>
+  ${c.draws?`<h3>✏️ رسومات مهمة تدرّب عليها</h3><ul>${c.draws.map(d=>`<li>${d}</li>`).join('')}</ul>`:''}
+  <div class="tipbox">📖 <b>أين أذاكر؟</b>  ${c.refs}</div>
  </div>
  <div class="card">
-  <h2>🧠 الخريطة المعرفية المصورة</h2>
-  <p class="muted">${c.mind.src}. الصور أصلية من أوراق العمل. اضغط على أي بطاقة تفتح لك: التعريف كما ورد + الصورة + سؤال الورقة + الإجابة + المصدر.</p>
+  <h2>🧠 خريطة الفهم</h2>
+  <div class="btnrow" style="margin:0 0 10px"><button class="btn gold" onclick="startTldr('${c.id}')">🎯 افهم الفصل في 3 دقائق</button></div>
+  <p class="muted">اتبع الأسهم: الفكرة ← السؤال ← المفاهيم المترابطة. البطاقات الملونة تُفتح بالضغط، والرقائق الرمادية معلومات سريعة.</p>
   <div class="flowmap">
    <div class="fm-root">${c.mind.root}</div><div class="fm-arrow">▼</div>
    ${c.mind.branches.map((b,bi)=>`<div class="fm-branch">
      <span class="fm-title">${b.t}</span>
-     ${FM_Q[b.t]?`<div class="fm-q">${FM_Q[b.t]}</div>`:''}
+     <div class="fm-q">❓ ${FM_Q[b.t]||''}</div>
      <div class="fm-arrow">▼</div>
-     <div class="fm-leaves">${b.leaves.map((l,li)=>{const im=findImg(l);return `<button class="pnode" onclick="mindPop('${c.id}',${bi},${li})">${im?`<img src="${IMGS[im.img]}" alt="${im.cap}">`:`<span class="pic-ph">${c.icon}</span>`}<span>${l}</span></button>`;}).join('')}</div>
-    </div>`).join('')}
+     <div class="fm-leaves">${b.leaves.map((l,li)=>{
+       const im=findImg(l), sv=findSvg(l), sp=findSimple(l);
+       const clickable=!!(im||sv||sp||c.defs.find(d=>l.includes(d[0])));
+       if(!clickable) return `<span class="node leaf" style="cursor:default;opacity:.95">${l}</span>`;
+       const thumb=im?`<img src="${IMGS[im.img]}" alt="">`:(sv?`<div class="svgthumb">${SVGS[sv.svg]}</div>`:`<span class="pic-ph">${c.icon}</span>`);
+       return `<button class="pnode" onclick="mindPop('${c.id}',${bi},${li})">${thumb}<span>${l}</span></button>`;
+      }).join('<span class="fm-plus">+</span>')}</div>
+    </div>`).join('<div class="fm-arrow" style="font-size:1rem">⬇</div>')}
   </div>
  </div>
  <div class="card">
-  <h2>📖 التعاريف كما وردت في الملفات</h2>
-  <div class="tablewrap"><table><thead><tr><th>المصطلح</th><th>التعريف كما ورد</th><th>المصدر من الملف</th></tr></thead>
-  <tbody>${c.defs.map(d=>`<tr><td><b>${d[0]}</b></td><td>${d[1]}</td><td class="muted">${d[2]}</td></tr>`).join('')}</tbody></table></div>
+  <h2>📖 التعاريف</h2>
+  <div class="tablewrap"><table><thead><tr><th>المصطلح</th><th>التعريف</th><th>💡 ببساطة</th></tr></thead>
+  <tbody>${c.defs.map(d=>{const sp=SIMPLE[d[0]];return `<tr><td><b>${d[0]}</b></td><td>${d[1]}</td><td>💡 ${sp?sp[0]:'—'}</td></tr>`;}).join('')}</tbody></table></div>
  </div>
  ${c.compare?`<div class="card"><h2>↔️ ${c.compare.title}</h2><p class="muted">${c.compare.src}</p>
   <div class="tablewrap"><table><thead><tr><th></th><th>المواد الموصلة</th><th>المواد العازلة</th></tr></thead>
@@ -689,19 +820,19 @@ function renderChapter(c){
  ${c.chart?`<div class="card"><h2>🗒️ ${c.chart.q}</h2><p class="muted">${c.chart.src}</p><div class="fm-leaves">${c.chart.ans.map(a=>`<span class="node leaf" style="cursor:default">${a}</span>`).join('')}</div><div class="tipbox">📖 ${c.chart.phys}</div></div>`:''}
  <div class="card">
   <h2>🃏 البطاقات التعليمية</h2>
-  <p class="muted">المصطلح ← اضغط لتقلب ← التعريف بنصه الوارد في الملفات.</p>
+  <p class="muted">المصطلح ← اضغط لتقلب ← التعريف.</p>
   <div id="flashArea"></div>
  </div>
  <div class="card">
   <h2>🧪 المختبر العلمي</h2>
-  ${c.lab?`<h3>${c.lab.title}</h3><p class="muted">${c.lab.src}</p><ul>${c.lab.items.map(i=>`<li style="margin-bottom:4px">${i}</li>`).join('')}</ul>`:'<p><b>غير وارد في الملفات</b> — لا توجد تجارب منصوص عليها لهذا الفصل في الملفات المرفوعة.</p>'}
+  ${c.lab?`<h3>${c.lab.title}</h3><p class="muted">${c.lab.src}</p><ul>${c.lab.items.map(i=>`<li style="margin-bottom:4px">${i}</li>`).join('')}</ul>`:'<p>تجارب هذا الفصل تنفذونها مع المعلم في الصف 👩‍🔬 — وتقدر تتدرب هنا بالأسئلة والألعاب!</p>'}
  </div>
- ${c.id==='c7'?`<div class="card"><h2>🖼️ أسئلة قراءة الصورة — بالصور الأصلية</h2><p class="muted">أوراق العمل — ف7، السؤال الخامس: أكمل حسب المطلوب.</p>
+ ${c.id==='c7'?`<div class="card"><h2>🖼️ أسئلة قراءة الصورة</h2><p class="muted">انظر إلى الصورة وأكمل المطلوب:</p>
   <div class="grid2">
    <div class="trophy"><img src="${IMGS.earth}" style="width:100%;border-radius:12px" alt="دوران الأرض حول محورها"><p><b>المطلوب:</b> ينتج عن دوران الأرض حول محورها .... ويستغرق ....</p></div>
    <div class="trophy"><img src="${IMGS.eclipse}" style="width:100%;border-radius:12px" alt="ظاهرة الخسوف"><p><b>المطلوب:</b> تُعرف هذه الظاهرة بـ ....</p></div>
   </div></div>`:''}
- ${c.id==='c10'?`<div class="card"><h2>🖼️ أسئلة قراءة الصورة — بالصور الأصلية</h2><p class="muted">أوراق العمل — ف10 (ب): أضع أسفل كل صورة الكلمة المناسبة لها من: (الحمل الحراري – قواطع كهربائية – التفريغ الكهربائي – تخطيط المجال الكهربائي – دائرة كهربائية – التوازي)</p>
+ ${c.id==='c10'?`<div class="card"><h2>🖼️ أسئلة قراءة الصورة</h2><p class="muted">أضع أسفل كل صورة الكلمة المناسبة لها من: (الحمل الحراري – قواطع كهربائية – التفريغ الكهربائي – تخطيط المجال الكهربائي – دائرة كهربائية – التوازي)</p>
   <div class="grid2">
    <div class="trophy"><img src="${IMGS.parallel}" style="width:70%;border-radius:12px" alt="دائرة كهربائية على التوازي"><p>دائرة كهربائية على: <b>التوازي</b></p></div>
    <div class="trophy"><img src="${IMGS.conv}" style="width:100%;border-radius:12px" alt="الحمل الحراري"><p>نوع التوصيل: <b>الحمل الحراري</b></p></div>
@@ -711,8 +842,8 @@ function renderChapter(c){
    <div class="trophy"><img src="${IMGS.field}" style="width:100%;border-radius:12px" alt="تخطيط المجال المغناطيسي"><p><b>تخطيط المجال المغناطيسي</b></p></div>
   </div></div>`:''}
  <div class="card">
-  <h2>📝 اختبار الفصل — أسئلة أوراق العمل نفسها</h2>
-  <p class="muted">5 أسئلة عشوائية من أسئلة ورقة العمل حرفياً (اختيار من متعدد، صح وخطأ، أكمل بكلمات الورقة). كل إجابة صحيحة = 10 XP ⭐</p>
+  <h2>📝 اختبار الفصل</h2>
+  <p class="muted">5 أسئلة عشوائية (اختيار من متعدد، صح وخطأ، أكمل). كل إجابة صحيحة = 10 XP ⭐</p>
   <div class="btnrow"><button class="btn green" onclick="startQuiz('${c.id}')">🎯 ابدأ جولة</button></div>
   <div id="quizArea"></div>
  </div>`;
@@ -721,18 +852,21 @@ function renderChapter(c){
 /* interactive mindmap popup: explanation + quick question */
 function mindPop(cid,bi,li){
  const c=DATA.find(x=>x.id===cid);const leaf=c.mind.branches[bi].leaves[li];
- const key=leaf.split('،')[0].split(':')[0].trim();
+ const key=leaf.split('←')[0].split(':')[0].split('،')[0].trim();
  const def=c.defs.find(d=>key.includes(d[0])||d[0].includes(key)||leaf.includes(d[0]));
- const rel=c.qs.find(x=>x.t==='tf'&&x.a===true&&(x.q.includes(key)||(def&&x.q.includes(def[0]))));
+ const sp=findSimple(leaf)||(def?findSimple(def[0]):null);
  const q=shuffle(c.qs.filter(x=>x.q.includes(key)||(def&&(x.q.includes(def[0])||x.q.includes(def[1].slice(0,15))))))[0];
- const im=findImg(leaf);
+ const im=findImg(leaf)||(def?findImg(def[0]):null);
+ const sv=(!im)?(findSvg(leaf)||(def?findSvg(def[0]):null)):null;
+ const pic=im?`<img src="${IMGS[im.img]}" alt="${im.cap}"><p class="muted" style="margin:4px 0 0;font-size:.82rem">🖼️ ${im.cap}</p>`:(sv?`<div style="border:2px solid #e4e0f5;border-radius:14px;overflow:hidden">${SVGS[sv.svg]}</div><p class="muted" style="margin:4px 0 0;font-size:.78rem">${sv.cap}</p>`:'');
  document.getElementById('mboxContent').innerHTML=`
   <button class="mclose" onclick="document.getElementById('mindModal').style.display='none'">✕</button>
-  <h3 style="margin:0 0 8px">${c.icon} ${leaf}</h3>
-  ${im?`<img src="${IMGS[im.img]}" alt="${im.cap}"><p class="muted" style="margin:4px 0 0">🖼️ ${im.cap}<br>${im.src}</p>`:''}
-  ${def?`<div class="msec"><b class="lab">📖 التعريف كما ورد:</b><br>«${def[1]}»<br><span class="muted">${def[2]}</span></div>`:`<div class="msec"><b class="lab">📖 التعريف:</b> غير وارد كتعريف مستقل في الملفات — العبارة منقولة من أسئلة أوراق العمل ضمن ${c.mind.branches[bi].t}.</div>`}
-  ${rel&&(!def||rel.q!==def[1])?`<div class="msec"><b class="lab">💬 كما ورد في الورقة:</b> ${rel.q} <span class="muted">(${rel.src})</span></div>`:''}
-  ${q?`<div class="msec"><b class="lab">❓ سؤال من ورقة العمل (${q.src}):</b><br>${q.q}${q.t!=='tf'?'<br>'+q.o.map(o=>'• '+o).join('<br>'):''}
+  <h3 style="margin:0 0 8px">${c.icon} ${def?def[0]:leaf}</h3>
+  ${pic}
+  ${def?`<div class="msec"><b class="lab">📖 التعريف:</b> ${def[1]}</div>`:''}
+  ${sp?`<div class="msec" style="background:#fff8e1"><b class="lab">💡 ببساطة:</b> ${sp.s[0]}</div>
+  <div class="msec" style="background:#e9fbf3"><b class="lab">🏠 أين أراه في حياتي؟</b> ${sp.s[1]}</div>`:''}
+  ${q?`<div class="msec"><b class="lab">❓ سؤال متوقع:</b><br>${q.q}${q.t!=='tf'?'<br>'+q.o.map(o=>'• '+o).join('<br>'):''}
    <div class="btnrow"><button class="btn blue" id="mAnsBtn" style="padding:5px 16px;font-size:.9rem">أظهر الإجابة</button></div></div>`:''}`;
  if(q){const btn=document.getElementById('mAnsBtn');const ans=q.t==='tf'?(q.a?'صح':'خطأ'):q.o[q.a];btn.onclick=function(){this.outerHTML='<b style="color:var(--green)">✅ الإجابة: '+ans+'</b>';};}
  document.getElementById('mindModal').style.display='flex';
@@ -755,7 +889,7 @@ function drawQ(){
   area.innerHTML=`<div class="big-result"><div class="emoji">${pct>=80?'🏆':pct>=60?'😊':'💪'}</div><h3>نتيجتك: ${QZ.right}/${QZ.qs.length} (${pct}%)</h3><p>${pct>=80?'ممتاز! أنت نجم هذا العالم ⭐':pct>=60?'جيد جداً — جولة أخرى وتتقنه!':'راجع الشرح والبطاقات ثم حاول مجدداً!'}</p><button class="btn green" onclick="startQuiz('${QZ.cid}')">🔁 جولة جديدة</button></div>`;return;}
  const q=QZ.qs[QZ.at];
  const opts=q.t==='tf'?['صح ✅','خطأ ❌']:q.o;
- area.innerHTML=`<div class="qbox"><div class="muted">سؤال ${QZ.at+1} من ${QZ.qs.length} — ${q.t==='tf'?'صح أو خطأ':q.t==='fill'?'أكمل':'اختيار من متعدد'} (المصدر: ${q.src})</div>
+ area.innerHTML=`<div class="qbox"><div class="muted">سؤال ${QZ.at+1} من ${QZ.qs.length} — ${q.t==='tf'?'صح أو خطأ':q.t==='fill'?'أكمل':'اختيار من متعدد'}</div>
   <div class="qtxt">${q.q}</div><div class="opts">${opts.map((o,i)=>`<button onclick="answer(${i})">${o}</button>`).join('')}</div><div class="feedback" id="fb"></div></div>`;
 }
 function answer(i){
@@ -764,7 +898,7 @@ function answer(i){
  btns[q.t==='tf'?(q.a?0:1):q.a].classList.add('ok');if(!correct)btns[i].classList.add('no');
  S.stats[QZ.cid].seen.add(q.i);
  if(correct){S.stats[QZ.cid].right++;QZ.right++;addXP(10);trophy('first');document.getElementById('fb').innerHTML='🎉 صحيح! +10 XP';}
- else{S.stats[QZ.cid].wrong++;updateHUD();document.getElementById('fb').innerHTML='❌ ليست صحيحة — الإجابة الصحيحة باللون الأخضر <span class="muted">('+q.src+')</span>';}
+ else{S.stats[QZ.cid].wrong++;updateHUD();document.getElementById('fb').innerHTML='❌ ليست صحيحة — الإجابة الصحيحة باللون الأخضر';}
  setTimeout(()=>{QZ.at++;drawQ();},1400);
 }
 /* ====== GAMES HUB ====== */
@@ -793,7 +927,7 @@ function startMatch(){
  const withM=DATA.filter(c=>c.match);const c=withM[Math.floor(Math.random()*withM.length)];
  const pairs=shuffle(c.match.pairs).slice(0,6).map(p=>({term:p[0],def:p[1]}));
  M={pairs,selT:null,selD:null,done:0};
- ga().innerHTML=`<h2>🧩 لعبة المطابقة (وصل)</h2><p class="muted">سؤال الوصل كما ورد في: ${c.match.src}</p>
+ ga().innerHTML=`<h2>🧩 لعبة المطابقة (وصل)</h2><p class="muted">صِل كل مصطلح بمعناه الصحيح!</p>
  <div class="matchwrap"><div id="terms">${shuffle(pairs.map((p,i)=>i)).map(i=>`<button data-i="${i}" onclick="pickT(this)">${pairs[i].term}</button>`).join('')}</div>
  <div id="defsCol">${shuffle(pairs.map((p,i)=>i)).map(i=>`<button data-i="${i}" onclick="pickD(this)">${pairs[i].def}</button>`).join('')}</div></div><div class="feedback" id="mfb"></div>`;
  ga().scrollIntoView({behavior:'smooth'});
@@ -804,7 +938,7 @@ function startMem(){
  const pairs=shuffle(allDefs()).slice(0,6);
  const cards=shuffle(pairs.flatMap((p,i)=>[{i,txt:p.term},{i,txt:'💡 '+(p.def.length>55?p.def.slice(0,52)+'…':p.def)}]));
  MEM={open:[],lock:false,found:0};
- ga().innerHTML=`<h2>🃏 لعبة الذاكرة</h2><p class="muted">جِد كل مصطلح مع تعريفه كما ورد في أوراق العمل (12 بطاقة).</p>
+ ga().innerHTML=`<h2>🃏 لعبة الذاكرة</h2><p class="muted">جِد كل مصطلح مع تعريفه (12 بطاقة).</p>
  <div class="mem">${cards.map((c,k)=>`<div class="mc hide" data-i="${c.i}" onclick="flipMem(this)"><span>${c.txt}</span></div>`).join('')}</div><div class="feedback" id="memfb" style="text-align:center"></div>`;
  ga().scrollIntoView({behavior:'smooth'});
 }
@@ -820,7 +954,7 @@ let DD=null;
 function startDD(){
  const set=DDSETS[Math.floor(Math.random()*DDSETS.length)];
  DD={set,sel:null,left:set.items.length,mistakes:0};
- ga().innerHTML=`<h2>🗂️ السحب والإفلات: ${set.title}</h2><p class="muted">${set.src} — اضغط على العنصر ثم على الصندوق المناسب.</p>
+ ga().innerHTML=`<h2>🗂️ السحب والإفلات: ${set.title}</h2><p class="muted">اضغط على العنصر ثم على الصندوق المناسب.</p>
  <div class="dditems" id="dditems">${set.items.map((it,i)=>`<button data-i="${i}" onclick="ddSel(this)">${it[0]}</button>`).join('')}</div>
  <div class="buckets">
   <div class="bucket" onclick="ddDrop(1)"><h4>${set.b1}</h4><div id="bk1"></div></div>
@@ -862,7 +996,7 @@ function spin(){
 }
 function wheelAsk(c){
  const q=shuffle(c.qs.filter(x=>x.t!=='tf'))[0];
- document.getElementById('wheelQ').innerHTML=`<div class="qbox"><div class="muted">العجلة اختارت: ${c.icon} ${c.title} — سؤال من ورقة العمل (${q.src})</div>
+ document.getElementById('wheelQ').innerHTML=`<div class="qbox"><div class="muted">العجلة اختارت: ${c.icon} ${c.title}</div>
  <div class="qtxt">${q.q}</div><div class="opts">${q.o.map((o,i)=>`<button onclick="wheelAns(this,${i},${q.a})">${o}</button>`).join('')}</div><div class="feedback" id="wfb"></div></div>`;
 }
 function wheelAns(el,i,a){
@@ -917,7 +1051,7 @@ function drawErr(){
 function errAns(i){
  const btns=document.querySelectorAll('#gameArea .opts button');btns.forEach(b=>b.disabled=true);
  const it=ER.cur[i];
- if(it.bad){btns[i].classList.add('ok');addXP(10);ER.found++;document.getElementById('erfb').innerHTML='🕵️ كشفت الخطأ! هذه العبارة إجابتها (خطأ) في ورقة العمل ('+it.src+')';if(ER.found>=5){trophy('err');}setTimeout(drawErr,1500);}
+ if(it.bad){btns[i].classList.add('ok');addXP(10);ER.found++;document.getElementById('erfb').innerHTML='🕵️ كشفت الخطأ! هذه العبارة خاطئة';if(ER.found>=5){trophy('err');}setTimeout(drawErr,1500);}
  else{btns[i].classList.add('no');btns[ER.cur.findIndex(x=>x.bad)].classList.add('ok');document.getElementById('erfb').innerHTML='❌ هذه الجملة صحيحة! الخطأ كان باللون الأخضر. <button class="btn" onclick="drawErr()">التالي</button>';}
 }
 /* adventure across worlds */
@@ -950,13 +1084,13 @@ function renderExam(){
   <div class="stat"><div class="big">${readiness()}%</div><div class="lbl">جاهزيتك الحالية</div></div>
   <div class="stat"><div class="big">${S.examBest===null?'—':S.examBest+'%'}</div><div class="lbl">أفضل نتيجة</div></div>
  </div>
- <h3>📌 الملاحظات المهمة (كما وردت في الملفات)</h3>
+ <h3>📌 ملاحظات مهمة</h3>
  <ul>${NOTES.map(m=>`<li style="margin-bottom:4px">${m}</li>`).join('')}</ul>
- <h3>🎯 المهارات المستهدفة في الاختبار — نقلاً عن الدليل الإرشادي</h3>
+ <h3>🎯 ماذا يشمل الاختبار؟</h3>
  ${DATA.map(c=>`<details style="margin-bottom:6px"><summary style="font-weight:800;cursor:pointer">${c.icon} ${c.num}: ${c.title} <span class="muted" style="font-weight:600">(${c.refs})</span></summary><ul>${c.skills.map(s=>`<li>${s}</li>`).join('')}</ul></details>`).join('')}
- <h3>📋 تعليمات الاختبار (من جدول الاختبارات النهائية)</h3>
+ <h3>📋 تعليمات يوم الاختبار</h3>
  <ul>${EXAM_RULES.map(r=>`<li style="margin-bottom:3px">${r}</li>`).join('')}</ul>
- <div class="btnrow"><button class="btn gold" onclick="startExam()">🚀 ابدأ الاختبار التجريبي (20 سؤالاً من أوراق العمل)</button></div>
+ <div class="btnrow"><button class="btn gold" onclick="startExam()">🚀 ابدأ الاختبار التجريبي (20 سؤالاً)</button></div>
  </div>
  <div class="card" id="examArea"></div>`;
 }
@@ -986,7 +1120,7 @@ function examResult(){
  <p>${pct>=90?'أنت جاهز تماماً للاختبار يا '+PLAYER+' ⭐':pct>=70?'قريب جداً من الجاهزية الكاملة!':'ركّز على الفصول الضعيفة بالأسفل ثم أعد المحاولة.'}</p></div>
  <h3>📊 التحليل حسب الفصول</h3>
  ${Object.entries(byCh).map(([t,v])=>`<div style="margin-bottom:8px"><b>${t}</b>: ${v.r}/${v.t}<div class="bar"><i style="width:${v.r/v.t*100}%;background:${v.r/v.t>=.7?'var(--green)':'var(--bad)'}"></i></div></div>`).join('')}
- ${wrong.length?`<h3>🔍 تحليل الأخطاء</h3>${wrong.map(w=>`<div class="qbox"><b>${w.q.q}</b><br>✅ الصحيح: <b>${w.q.t==='tf'?(w.q.a?'صح':'خطأ'):w.q.o[w.q.a]}</b><br><span class="muted">المصدر: ${w.q.src}</span></div>`).join('')}`:'<h3>🌟 لا أخطاء — أداء مثالي!</h3>'}
+ ${wrong.length?`<h3>🔍 تحليل الأخطاء</h3>${wrong.map(w=>`<div class="qbox"><b>${w.q.q}</b><br>✅ الصحيح: <b>${w.q.t==='tf'?(w.q.a?'صح':'خطأ'):w.q.o[w.q.a]}</b></div>`).join('')}`:'<h3>🌟 لا أخطاء — أداء مثالي!</h3>'}
  <div class="btnrow"><button class="btn gold" onclick="startExam()">🔁 اختبار جديد</button></div>`;
 }
 
@@ -1040,13 +1174,13 @@ function profSay(html){const out=document.getElementById('profOut');const d=docu
 function profExplain(){
  const v=document.getElementById('profSel').value;if(!v)return;const[cid,term]=v.split('|');
  const c=DATA.find(x=>x.id===cid);const d=c.defs.find(x=>x[0]===term);
- profSay(`<b>${term}</b> 🔬<br>«${d[1]}»<br><span class="muted">المصدر: ${d[2]}</span>`);
+ const ps=SIMPLE[term];profSay(`<b>${term}</b> 🔬<br>${d[1]}`+(ps?`<br>💡 ببساطة: ${ps[0]}<br>🏠 ${ps[1]}`:''));
 }
 function profQuiz(){
  const c=DATA[Math.floor(Math.random()*DATA.length)];const q=shuffle(c.qs.filter(x=>x.t!=='tf'))[0];
- profSay(`🎲 <b>سؤال من ورقة العمل (${q.src}):</b> ${q.q}<br>${q.o.map((o,i)=>'• '+o).join('<br>')}<br><button class="btn blue" style="padding:4px 14px;font-size:.85rem;margin-top:6px" onclick="this.outerHTML='✅ <b>'+${JSON.stringify(q.o[q.a]).replace(/"/g,'&quot;')}+'</b>'">أظهر الإجابة</button>`);
+ profSay(`🎲 <b>سؤالي لك:</b> ${q.q}<br>${q.o.map((o,i)=>'• '+o).join('<br>')}<br><button class="btn blue" style="padding:4px 14px;font-size:.85rem;margin-top:6px" onclick="this.outerHTML='✅ <b>'+${JSON.stringify(q.o[q.a]).replace(/"/g,'&quot;')}+'</b>'">أظهر الإجابة</button>`);
 }
-function profTip(){profSay('📌 ملاحظة من الملفات: '+NOTES[Math.floor(Math.random()*NOTES.length)]);}
+function profTip(){profSay('📌 تذكير مهم: '+NOTES[Math.floor(Math.random()*NOTES.length)]);}
 
 updateHUD();
 </script>
